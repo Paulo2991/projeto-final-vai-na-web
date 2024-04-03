@@ -22,7 +22,7 @@ public class ColaboradoresServiceImpl implements ColaboladoresService {
 		if (existente.isPresent()) {
 			return "CPF Ja cadastrado";
 		}else {
-			var colaborador = new Colaboradores(dados.nome(), dados.cpf(), dados.email(), dados.cargo());
+			var colaborador = new Colaboradores(dados.nome(), dados.email(), dados.cpf(), dados.cargo(),dados.endereco());
 			colaboradoresRepository.save(colaborador);
 		}
 		
@@ -32,5 +32,4 @@ public class ColaboradoresServiceImpl implements ColaboladoresService {
 	public List<Colaboradores> encontrarTodos() {
 		return colaboradoresRepository.findAll();
 	}
-
 }

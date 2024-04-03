@@ -13,9 +13,10 @@ import lombok.Setter;
 @Embeddable
 public class Endereco {
 	private String cep;
-	private String logadouro;
+	private String logradouro;
 	private String bairro;
 	private String cidade;
 	private Integer numero;
 	private String complemento;
+	private String uf;
 }
