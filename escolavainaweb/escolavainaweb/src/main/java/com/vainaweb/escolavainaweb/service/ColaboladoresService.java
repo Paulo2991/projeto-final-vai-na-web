@@ -1,8 +1,11 @@
 package com.vainaweb.escolavainaweb.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-@Service
+import com.vainaweb.escolavainaweb.dto.DadosColaborador;
+import com.vainaweb.escolavainaweb.model.Colaboradores;
+
 public interface ColaboladoresService {
-	
+	public String cadastrarColaborador(DadosColaborador dados);
+	public List<Colaboradores> encontrarTodos();
 }
