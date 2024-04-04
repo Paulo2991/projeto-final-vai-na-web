@@ -10,4 +10,5 @@ import com.vainaweb.escolavainaweb.model.Colaboradores;
 @Repository
 public interface ColaboradoresRepository extends JpaRepository<Colaboradores,Long>{
 	Optional<Colaboradores> findByCpf(String cpf);
+	Optional<Colaboradores> findByEmail(String email);
 }

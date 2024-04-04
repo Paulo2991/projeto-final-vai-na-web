@@ -6,6 +6,6 @@ import com.vainaweb.escolavainaweb.dto.DadosColaborador;
 import com.vainaweb.escolavainaweb.model.Colaboradores;
 
 public interface ColaboladoresService {
-	public String cadastrarColaborador(DadosColaborador dados);
+	public Colaboradores cadastrarColaborador(DadosColaborador dados);
 	public List<Colaboradores> encontrarTodos();
 }

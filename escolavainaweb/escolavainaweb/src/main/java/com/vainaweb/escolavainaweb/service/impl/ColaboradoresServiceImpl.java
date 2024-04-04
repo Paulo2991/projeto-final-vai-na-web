@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vainaweb.escolavainaweb.dto.DadosColaborador;
+import com.vainaweb.escolavainaweb.exceptions.ExceptionsManager;
 import com.vainaweb.escolavainaweb.intefaces.ColaboradoresRepository;
 import com.vainaweb.escolavainaweb.model.Colaboradores;
 import com.vainaweb.escolavainaweb.service.ColaboladoresService;
@@ -16,20 +17,28 @@ public class ColaboradoresServiceImpl implements ColaboladoresService {
 	@Autowired
 	private ColaboradoresRepository colaboradoresRepository;
 
-	public String cadastrarColaborador(DadosColaborador dados) {
-		var existente = colaboradoresRepository.findByCpf(dados.cpf());
+	public Colaboradores cadastrarColaborador(DadosColaborador dados) {
+		Colaboradores colaboladores = new Colaboradores(dados.nome(), dados.email(), dados.cpf(), dados.cargo(),
+				dados.endereco());
+		var cpfExistente = colaboradoresRepository.findByCpf(dados.cpf());
+		var emailExistente = colaboradoresRepository.findByEmail(dados.email());
 
-		if (existente.isPresent()) {
-			return "CPF Ja cadastrado";
-		}else {
-			var colaborador = new Colaboradores(dados.nome(), dados.email(), dados.cpf(), dados.cargo(),dados.endereco());
-			colaboradoresRepository.save(colaborador);
+		if (cpfExistente.isPresent()) {
+			throw new ExceptionsManager("CPF Já cadastrado!");
 		}
-		
-		return "Cadastrado Com Sucesso";
+
+		if (emailExistente.isPresent()) {
+			throw new ExceptionsManager("Email já cadastrado!");
+
+		} else {
+			this.colaboradoresRepository.save(colaboladores);
+		}
+
+		return colaboladores;
 	}
 
 	public List<Colaboradores> encontrarTodos() {
 		return colaboradoresRepository.findAll();
 	}
+	
 }

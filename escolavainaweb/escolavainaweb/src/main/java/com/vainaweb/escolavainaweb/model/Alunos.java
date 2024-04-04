@@ -2,6 +2,7 @@ package com.vainaweb.escolavainaweb.model;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import com.vainaweb.escolavainaweb.dto.EnderecoDTO;
 import com.vainaweb.escolavainaweb.enums.Curso;
 
 import jakarta.persistence.Column;
@@ -46,12 +47,15 @@ public class Alunos {
     @Embedded
     private Endereco endereco;
     
-    public Alunos(String nome, String email, String cpf, Curso curso, String telefone) {
+    public Alunos(String nome, String email, String cpf, Curso curso, String telefone,EnderecoDTO endereco) {
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
         this.curso = curso;
         this.telefone = telefone;
-    }
+        this.endereco = new Endereco(endereco.cep(), endereco.logradouro(),
+				endereco.bairro(),endereco.cidade(), 
+				endereco.numero(),endereco.complemento(), endereco.uf());    
+        }
 	
 }

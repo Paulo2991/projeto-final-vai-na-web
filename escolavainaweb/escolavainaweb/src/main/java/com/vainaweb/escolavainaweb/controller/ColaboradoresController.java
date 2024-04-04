@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vainaweb.escolavainaweb.dto.DadosAtualizadosColaboradores;
 import com.vainaweb.escolavainaweb.dto.DadosColaborador;
+import com.vainaweb.escolavainaweb.exceptions.ExceptionsManager;
 import com.vainaweb.escolavainaweb.intefaces.ColaboradoresRepository;
 import com.vainaweb.escolavainaweb.model.Colaboradores;
 import com.vainaweb.escolavainaweb.service.impl.ColaboradoresServiceImpl;
@@ -25,37 +26,49 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/colaboladores")
 public class ColaboradoresController {
-	
+
 	@Autowired
 	private ColaboradoresServiceImpl colaboradoresService;
-	
+
 	@Autowired
 	private ColaboradoresRepository colaboradoresRepository;
-	
+
 	@PostMapping
-	public ResponseEntity<String> cadastrarColaboradores(@RequestBody DadosColaborador dados) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(colaboradoresService.cadastrarColaborador(dados));
+	public ResponseEntity<?> cadastrarColaboradores(@RequestBody DadosColaborador dados) {
+		try {
+			Colaboradores colaboradores = colaboradoresService.cadastrarColaborador(dados);
+			return ResponseEntity.status(HttpStatus.CREATED).body(colaboradores);
+		}catch(ExceptionsManager e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+		}
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Colaboradores> listarColaboradoresPorId(@PathVariable Long id) {
 		return colaboradoresRepository.findById(id).map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
-	
+
 	@GetMapping
-	public List<Colaboradores> encontrarTodosOsColaboradores(){
+	public List<Colaboradores> encontrarTodosOsColaboradores() {
 		return colaboradoresService.encontrarTodos();
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<String> atualizarColaboradores(@PathVariable Long id, @RequestBody @Valid DadosAtualizadosColaboradores dadosAtualizadosColaboradores) {
-		var colaborador = colaboradoresRepository.getReferenceById(id);
-		colaborador.atualizarInfo(dadosAtualizadosColaboradores);
-		colaboradoresRepository.save(colaborador);
-		return ResponseEntity.status(HttpStatus.OK).body("Dados Atualizados");
+	public ResponseEntity<String> atualizarColaboradores(@PathVariable Long id,
+			@RequestBody @Valid DadosAtualizadosColaboradores dadosAtualizadosColaboradores) {
+		try {
+			var colaborador = colaboradoresRepository.getReferenceById(id);
+			colaborador.atualizarInfo(dadosAtualizadosColaboradores);
+			colaboradoresRepository.save(colaborador);
+			return ResponseEntity.status(HttpStatus.OK).body("Dados Atualizados");
+		}catch(ExceptionsManager e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+		}
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public String deletarColaboradores(@PathVariable Long id) {
 		colaboradoresRepository.deleteById(id);
