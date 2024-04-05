@@ -25,7 +25,7 @@ public class AlunosServiceImpl implements AlunosService {
 	
 	public Alunos encontrarAlunosPorId(Long id) {
 		Alunos alunos = alunosRepository.findById(id)
-				.orElseThrow(() -> new ExceptionsManager("Alunos não cadastrados"));
+				.orElseThrow(() -> new ExceptionsManager("Aluno não cadastrado com esse " + id));
 		return alunos;
 	}
 
@@ -49,7 +49,7 @@ public class AlunosServiceImpl implements AlunosService {
 
 	public Alunos updateAlunos(Long id, DadosAtualizadosAlunos dadosAtualizadosAlunos) {
 		Alunos alunos = alunosRepository.findById(id)
-				.orElseThrow(() -> new ExceptionsManager("Alunos não cadastrados"));
+				.orElseThrow(() -> new ExceptionsManager("Aluno não cadastrado com esse " + id));
 		alunos.setNome(dadosAtualizadosAlunos.nome());
 		alunos.setTelefone(dadosAtualizadosAlunos.telefone());
 		alunos.setCurso(dadosAtualizadosAlunos.curso());
